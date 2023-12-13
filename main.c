@@ -56,9 +56,9 @@ int main(int argc, char *argv[], char *envp[])
 
 		if (execute_cmd(args, input_cmd))
 			continue;
-		else
+		/*else*/
 			/*you need to get path*/
-			execute_path(args, argv[0]);
+			/*execute_path(args, argv[0]);*/
 	}
 
 	free(input_cmd);
