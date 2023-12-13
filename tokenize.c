@@ -1,11 +1,16 @@
 #include "main.h"
 
+/**
+* tokenize - split strings into substrings
+* @input: array of strings (commands)
+*
+* Return: array of substrings
+*/
 
-
-char ** tokenize(char *input)
+char **tokenize(char *input)
 {
 
-    char *cmd_cpy = NULL, *token = NULL;
+	char *cmd_cpy = NULL, *token = NULL;
 
 	int argc = 0, i = 0;
 

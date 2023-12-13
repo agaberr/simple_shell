@@ -2,35 +2,31 @@
 
 /**
 * main - Entry point
-* @argc: number of arguments
-* @argv: arguments passsed
 *
 * Return: Always 0 (success)
 */
 
-int main(void) {
-    char *input = NULL;
-    size_t input_size = 0;
-    pid_t child_pid;
-    int status;
-    int len = 0;
+int main(void)
+{
+	char *input = NULL;
+	size_t input_size = 0;
+	int len = 0;
 
-    while (true) {
+	while (true)
+	{
+		if (read_line(&input, &input_size) == 0)
+			break;
 
-        // read line from user
-        if (read_line(&input, &input_size) == 0)
-            // handle CTRL + D
-            break;
+		len = strcspn(input, "\n");
+		input[len] = '\0';
 
-        // Remove newline character from input
-        len = strcspn(input, "\n");
-        input[len] = '\0';
+		if (strcmp(input, "exit") == 0)
+			exit(0);
 
-        status = exec_cmd(input);
-    }
+		exec_cmd(input);
+	}
 
-    // Free allocated memory
-    free(input);
+	free(input);
 
-    return 0;
+	return (0);
 }

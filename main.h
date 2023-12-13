@@ -14,10 +14,11 @@
 #define fail -1
 #define DELIM " "
 
+extern char **environ;
 
 
 int read_line(char **input, size_t *input_size);
-char ** tokenize(char *input);
+char **tokenize(char *input);
 int exec_cmd(char *input);
 
 
