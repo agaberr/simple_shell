@@ -8,18 +8,30 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <string.h>
+#include<signal.h>
 
 #define true 1
 #define false 0
 #define fail -1
-#define DELIM " "
+#define DELIM " :\t\r\n"
 
 extern char **environ;
 
 
-int read_line(char **input, size_t *input_size);
-char **tokenize(char *input);
-int exec_cmd(char *input);
+char *_strdup(char *s);
+
+
+void free_2D_arr(char **args);
+
+
+int read_line(char *input);
+char **tokenizer(char *input_cmd);
+char *get_path(void);
+int execute_cmd(char **args, char *input_cmd);
+/*void execute_path(char **args, char *program_name);*/
+
+
+
 
 
 #endif

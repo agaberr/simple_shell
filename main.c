@@ -1,32 +1,66 @@
 #include "main.h"
 
 /**
-* main - Entry point
+* handler - Handle interrupt
+* @signum: signal number
 *
-* Return: Always 0 (success)
+* Return: None
 */
 
-int main(void)
+void handler(int signum)
 {
-	char *input = NULL;
+	(void) signum;
+	write(STDERR_FILENO, "$ ", 2);
+	write(STDERR_FILENO, "\n", 1);
+	raise(SIGKILL);
+}
+
+/**
+* main - Entry point
+* @argc: number of arguments
+* @argv: arguments
+* @envp: enviroment args
+*
+* Return: Always success (0)
+*/
+
+int main(int argc, char *argv[], char *envp[])
+{
+	char *input_cmd = NULL;
 	size_t input_size = 0;
-	int len = 0;
+	int l_size = 0; /*index of \n in input_cmd*/
+	char **args = NULL;
+	(void) envp, (void) argv;
+	signal(SIGINT, handler);
+
+	if (argc < 1)
+		return (-1);
 
 	while (true)
 	{
-		if (read_line(&input, &input_size) == 0)
+		/*read input from user*/
+		if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+			write(STDERR_FILENO, "$ ", 2);
+
+		if (getline(&input_cmd, &input_size, stdin) == fail)
 			break;
 
-		len = strcspn(input, "\n");
-		input[len] = '\0';
+		/*remove \n in end of input_cmd*/
+		l_size = strcspn(input_cmd, "\n");
+		input_cmd[l_size] = '\0';
 
-		if (strcmp(input, "exit") == 0)
-			exit(0);
+		args = tokenizer(input_cmd);
 
-		exec_cmd(input);
+		if (!args || !*args || **args == '\0')
+			continue;
+
+		if (execute_cmd(args, input_cmd))
+			continue;
+		else
+			/*you need to get path*/
+			execute_path(args, argv[0]);
 	}
 
-	free(input);
-
+	free(input_cmd);
 	return (0);
 }
