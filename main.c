@@ -56,9 +56,12 @@ int main(int argc, char *argv[], char *envp[])
 
 		if (execute_cmd(args, input_cmd))
 			continue;
-		/*else*/
-			/*you need to get path*/
-			/*execute_path(args, argv[0]);*/
+		/*if(execute_path(args, argv[0]))*/
+			/*continue;*/
+
+		/*no such file or directory*/
+		write(STDERR_FILENO, argv[0], strlen(argv[0]));
+		write(STDERR_FILENO, " No such file or directory\n", 27);
 	}
 
 	free(input_cmd);
