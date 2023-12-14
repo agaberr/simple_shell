@@ -10,7 +10,6 @@
 char *GET_VALID_PATH(char **TOKEN_PATH, char *command)
 {
 	int i = 0;
-	int l_size;
 
 	char *FULL_PATH = NULL;
 

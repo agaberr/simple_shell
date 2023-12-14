@@ -27,7 +27,7 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char *input_cmd = NULL;
 	size_t input_size = 0;
-	int flag = 0, l_size = 0; /*index of \n in input_cmd*/
+	int flag = false, l_size = 0; /*index of \n in input_cmd*/
 	char **args = NULL;
 	(void) envp, (void) argv;
 	signal(SIGINT, handler);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[], char *envp[])
 		/*read input from user*/
 		if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 		{
-			flag == true;
+			flag = true;
 			write(STDERR_FILENO, "$ ", 2);
 		}
 		if (getline(&input_cmd, &input_size, stdin) == fail)
