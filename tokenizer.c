@@ -8,43 +8,45 @@
 */
 
 char **tokenizer(char *input_cmd)
+{size_t tokens = 1, token_start = 0, token_len, i;
+char *ptr = input_cmd;
+char **args;
+while (*ptr)
 {
-	size_t i = 0;
-	int len = 2, flag = 0;
-	char **argv = NULL;
-	char *cmd_cpy = NULL, *token = NULL, *ptr = NULL;
-
-	cmd_cpy = _strdup(input_cmd);
-
-	if (cmd_cpy == NULL)
-		return (NULL);
-	ptr = cmd_cpy;
-	while (*ptr)
+	while (*ptr && strchr(DELIM, *ptr))
+	ptr++;
+	if (*ptr)
+	tokens++;
+	while (*ptr && !strchr(DELIM, *ptr))
+	ptr++;
+}
+args = malloc(sizeof(char *) * (tokens + 1));
+if (!args)
+	return (NULL);
+ptr = input_cmd;
+for (i = 0; i < tokens - 1; i++)
+{
+	while (*ptr && strchr(DELIM, *ptr))
 	{
-		if (strchr(DELIM, *ptr) && !flag)
-		{
-			len++;
-			flag = 1;
-		}
-		else if (!strchr(DELIM, *ptr) && flag)
-			flag = 0;
-		ptr++;
+	ptr++;
+	token_start++;
 	}
-	argv = malloc(sizeof(char *) * (len));
-	token = strtok(cmd_cpy, DELIM);
-
-	while (token)
+	token_len = 0;
+	while (*ptr && !strchr(DELIM, *ptr))
 	{
-		argv[i] = _strdup(token);
-
-		if (argv[i] == NULL)
-		{
-			free_2D_arr(argv);
-			return (NULL);
-		}
-		token = strtok(NULL, DELIM);
-		i++;
+	ptr++;
+	token_len++;
 	}
-	argv[i] = NULL;
-	return (argv);
+	args[i] = malloc(token_len + 1);
+	if (!args[i])
+	{
+	free_2D_arr(args);
+	return (NULL);
+	}
+	strncpy(args[i], input_cmd + token_start, token_len);
+	args[i][token_len] = '\0';
+	token_start += token_len;
+}
+args[tokens] = NULL;
+return (args);
 }
