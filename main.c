@@ -10,9 +10,8 @@
 void handler(int signum)
 {
 	(void) signum;
-	write(STDERR_FILENO, "$ ", 2);
-	write(STDERR_FILENO, "\n", 1);
-	raise(SIGKILL);
+	write(STDIN_FILENO, "\n$ ", 3);
+	signal(SIGINT, handler);
 }
 
 /**
@@ -28,7 +27,7 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char *input_cmd = NULL;
 	size_t input_size = 0;
-	int l_size = 0; /*index of \n in input_cmd*/
+	int flag = 0, l_size = 0; /*index of \n in input_cmd*/
 	char **args = NULL;
 	(void) envp, (void) argv;
 	signal(SIGINT, handler);
@@ -40,8 +39,10 @@ int main(int argc, char *argv[], char *envp[])
 	{
 		/*read input from user*/
 		if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+		{
+			flag == true;
 			write(STDERR_FILENO, "$ ", 2);
-
+		}
 		if (getline(&input_cmd, &input_size, stdin) == fail)
 			break;
 
@@ -50,20 +51,18 @@ int main(int argc, char *argv[], char *envp[])
 		input_cmd[l_size] = '\0';
 
 		args = tokenizer(input_cmd);
-
 		if (!args || !*args || **args == '\0')
 			continue;
 
-		if (execute_cmd(args, input_cmd))
+
+		if (execute_cmd(args, input_cmd, argv[0]))
 			continue;
-		/*if(execute_path(args, argv[0]))*/
-			/*continue;*/
+		if (execute_path(args, argv[0]))
+			continue;
 
-		/*no such file or directory*/
-		write(STDERR_FILENO, argv[0], strlen(argv[0]));
-		write(STDERR_FILENO, " No such file or directory\n", 27);
 	}
-
+	if (l_size == fail && flag)
+		write(STDERR_FILENO, "\n", 1);
 	free(input_cmd);
 	return (0);
 }

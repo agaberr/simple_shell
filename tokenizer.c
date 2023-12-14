@@ -39,14 +39,12 @@ char **tokenizer(char *input_cmd)
 
 		if (argv[i] == NULL)
 		{
-			free(argv);
+			free_2D_arr(argv);
 			return (NULL);
 		}
-
 		token = strtok(NULL, DELIM);
 		i++;
 	}
 	argv[i] = NULL;
-	free(cmd_cpy);
 	return (argv);
 }

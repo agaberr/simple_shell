@@ -3,11 +3,12 @@
 * execute_cmd - Excute the command entered
 * @args: array of strings user entered
 * @input_cmd: string user entered
+* @program_name: program name
 *
 *  Return: 1 if executed, 0 otherwise
 */
 
-int execute_cmd(char **args, char *input_cmd)
+int execute_cmd(char **args, char *input_cmd, char *program_name)
 {	pid_t pid;
 	char **env = environ;
 	int is_env_or_exit = false, status, i = 0, env_len = strlen(env[i]);
@@ -32,20 +33,20 @@ int execute_cmd(char **args, char *input_cmd)
 	if (is_env_or_exit)
 		return (true);
 	else if (**args == '/')
-	{
-		pid = fork();
+	{pid = fork();
 		if (pid == 0) /*child*/
 		{
-			execve(args[i], args, env);
-			free(args[i]);
-			free_2D_arr(args);
-			perror(args[i]);
-			exit(98);
+			if (execve(args[i], args, env) == fail)
+			{
+				perror(program_name);
+				free_2D_arr(args);
+				exit(98);
+			}
 		}
 		else if (pid > 0) /*parent*/
 			wait(&status);
 		else
-			perror(args[0]);
+			perror(program_name);
 		return (true);
 	}
 	return (false);
