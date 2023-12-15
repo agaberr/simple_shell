@@ -34,7 +34,7 @@ char *find_path(char *input_cmd)
 	token = strtok(PATH, DELIM);
 	while (token)
 	{
-		FULL_PATH = concat_path_command(PATH, input_cmd);
+		FULL_PATH = concat_path_command(token, input_cmd);
 
 		if (access(FULL_PATH, F_OK | X_OK) == 0)
 		{
