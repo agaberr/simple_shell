@@ -26,7 +26,8 @@ void free_2D_arr(char **args);
 char *concat_path_command(char *PATH, char *command);
 char *find_path(char *input_cmd);
 void print_not_found(char *program_name, int cmd_num, char *input_cmd);
-int built_in_functions(char **args, char *cmd, int status);
+int built_in_functions(char **args, int exit_stat, char *cmd,
+int *status, char *program_name, int cmd_num);
 
 
 #endif
