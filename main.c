@@ -1,20 +1,6 @@
 #include "main.h"
 
 /**
-* handler - Handle interrupt
-* @signum: signal number
-*
-* Return: None
-*/
-
-void handler(int signum)
-{
-	(void) signum;
-	write(STDIN_FILENO, "\n$ ", 3);
-	signal(SIGINT, handler);
-}
-
-/**
 * main - Entry point
 * @argc: number of arguments
 * @argv: arguments
@@ -23,46 +9,36 @@ void handler(int signum)
 * Return: Always success (0)
 */
 
-int main(int argc, char *argv[], char *envp[])
+int main(int argc, char **argv, char **envp)
 {
-	char *input_cmd = NULL;
-	size_t input_size = 0;
-	int flag = false, l_size = 0; /*index of \n in input_cmd*/
-	char **args = NULL;
-	(void) envp, (void) argv;
-	signal(SIGINT, handler);
 
-	if (argc < 1)
-		return (-1);
+	char *input_cmd = NULL;
+	char **args = NULL;
+	int stat = 0, i = 0;
+
+	(void)argc, (void) envp;
 
 	while (true)
 	{
-		/*read input from user*/
-		if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+		input_cmd = read_command();
+
+		if (!input_cmd)
 		{
-			flag = true;
-			write(STDERR_FILENO, "$ ", 2);
+			if (isatty(STDIN_FILENO))
+			{
+				write(STDOUT_FILENO, "\n", 1);
+			}
+			return (stat);
 		}
-		if (getline(&input_cmd, &input_size, stdin) == fail)
-			break;
+		i++;
 
-		/*remove \n in end of input_cmd*/
-		l_size = strcspn(input_cmd, "\n");
-		input_cmd[l_size] = '\0';
+		args = tokenize(input_cmd);
 
-		args = tokenizer(input_cmd);
-		if (!args || !*args || **args == '\0')
+		if (!args)
 			continue;
 
 
-		if (execute_cmd(args, input_cmd, argv[0]))
-			continue;
-		if (execute_path(args, argv[0]))
-			continue;
+		stat = execute_cmd(args, argv[0], i);
 
 	}
-	if (l_size == fail && flag)
-		write(STDERR_FILENO, "\n", 1);
-	free(input_cmd);
-	return (0);
 }
