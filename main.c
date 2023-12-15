@@ -37,8 +37,8 @@ int main(int argc, char **argv, char **envp)
 		if (!args)
 			continue;
 
-
-		stat = execute_cmd(args, argv[0], i);
+		if (!built_in_functions(args, args[0], stat))
+			stat = execute_cmd(args, argv[0], i);
 
 	}
 }
