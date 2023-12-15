@@ -27,6 +27,8 @@ char *concat_path_command(char *PATH, char *command);
 char *find_path(char *input_cmd);
 void print_not_found(char *program_name, int cmd_num, char *input_cmd);
 int built_in_functions(char **args, char *cmd, int status);
+void change_dir(char **args);
+void set_unset_env(char **args);
 
 
 #endif
