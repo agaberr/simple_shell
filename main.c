@@ -14,7 +14,7 @@ int main(int argc, char **argv, char **envp)
 
 	char *input_cmd = NULL;
 	char **args = NULL;
-	int stat = 0, i = 0, exit_stat;
+	int stat = 0, i = 0;
 	(void)argc, (void) envp;
 
 	while (true)
@@ -35,9 +35,6 @@ int main(int argc, char **argv, char **envp)
 
 		if (!args)
 			continue;
-
-		if (argv[1])
-			exit_stat = atoi(argv[1]);
 
 		if (!built_in_functions(args, args[0], stat))
 			stat = execute_cmd(args, argv[0], i);
