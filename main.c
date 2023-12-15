@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **envp)
 		if (argv[1])
 			exit_stat = atoi(argv[1]);
 
-		if (!built_in_functions(args, exit_stat, args[0], &stat, argv[0], i))
+		if (!built_in_functions(args, args[0], stat))
 			stat = execute_cmd(args, argv[0], i);
 
 	}

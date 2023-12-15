@@ -27,7 +27,7 @@ int execute_cmd(char **args, char *program_name, int num)
 	pid = fork();
 	if (pid == 0) /*child*/
 	{
-		if (execve(args[0], args, environ) == fail)
+		if (execve(cmd, args, environ) == fail)
 		{
 			free_2D_arr(args);
 			free(cmd);
