@@ -29,6 +29,22 @@ int built_in_functions(char **args, char *cmd, int status)
 		free_2D_arr(args);
 		return (true);
 	}
+	else if (strcmp(cmd, "setenv") == false)
+	{
+		if (setenv(args[0], args[1], 1))
+		{
+			return (true);
+			free_2D_arr(args);
+		}
+	}
+	else if (strcmp(cmd, "setenv") == false)
+	{
+		for (i = 1; args[i]; i++)
+		unsetenv(args[i]);
+		free_2D_arr(args);
+		return (true);
+	}
+
 
 	return (false);
 }
